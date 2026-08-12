@@ -243,4 +243,103 @@ footer p + p {
   .price-value {
     font-size: 34px;
   }
+/* Модальное окно бронирования */
+
+.modal {
+  position: fixed;
+  inset: 0;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background: rgba(0, 0, 0, 0.6);
+  z-index: 1000;
+}
+
+.modal.active {
+  display: flex;
+}
+
+.modal-content {
+  width: min(500px, 100%);
+  background: white;
+  border-radius: 24px;
+  padding: 35px;
+  position: relative;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
+  animation: modalOpen 0.2s ease-out;
+}
+
+@keyframes modalOpen {
+  from {
+    opacity: 0;
+    transform: translateY(20px) scale(0.97);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.modal-close {
+  position: absolute;
+  top: 15px;
+  right: 18px;
+  border: none;
+  background: none;
+  font-size: 30px;
+  cursor: pointer;
+  color: #777;
+}
+
+.modal-title {
+  font-size: 28px;
+  margin-bottom: 25px;
+}
+
+.booking-info {
+  background: #f5f6f8;
+  border-radius: 15px;
+  padding: 20px;
+  margin-bottom: 25px;
+}
+
+.booking-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 8px 0;
+}
+
+.booking-total {
+  border-top: 1px solid #ddd;
+  margin-top: 10px;
+  padding-top: 15px;
+  font-size: 21px;
+  font-weight: bold;
+}
+
+.modal-actions {
+  display: flex;
+  gap: 12px;
+}
+
+.modal-actions button {
+  flex: 1;
+}
+
+.btn-secondary {
+  background: #eee;
+  color: #222;
+}
+
+@media (max-width: 600px) {
+  .modal-content {
+    padding: 25px 20px;
+  }
+
+  .modal-actions {
+    flex-direction: column;
+  }
 }
