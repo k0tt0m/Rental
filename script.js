@@ -43,8 +43,9 @@ function calculatePrice() {
 
   const total = nights * pricePerNight;
 
+  // ИСПРАВЛЕНО: добавлена обратная кавычка ` в начале строки
   result.textContent =
-    Количество ночей: ${nights}. Стоимость: ${formatPrice(total)} ₽;
+    `Количество ночей: ${nights}. Стоимость: ${formatPrice(total)} ₽`;
 }
 
 bookButton.addEventListener("click", () => {
