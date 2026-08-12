@@ -58,6 +58,7 @@ bookButton.addEventListener("click", () => {
   const end = new Date(checkout.value);
 
   const difference = end - start;
+
   const nights = Math.ceil(
     difference / (1000 * 60 * 60 * 24)
   );
