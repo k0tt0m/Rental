@@ -49,10 +49,43 @@ textarea{min-height:140px;resize:vertical}
 </section>
 
 <section class="admin-card">
-<h2>Стоимость</h2>
+  <h2>Стоимость</h2>
 
-<label for="price-per-night">Цена за сутки, ₽</label>
-<input type="number" id="price-per-night" class="price-input" min="0" placeholder="3000">
+  <label for="price-per-night">
+    Цена за сутки, ₽
+  </label>
+
+  <input
+    type="number"
+    id="price-per-night"
+    class="price-input"
+    min="0"
+    placeholder="3000"
+  >
+
+  <label for="included-guests">
+    Количество гостей входит в цену
+  </label>
+
+  <input
+    type="number"
+    id="included-guests"
+    class="price-input"
+    min="1"
+    placeholder="2"
+  >
+
+  <label for="extra-guest-price">
+    Доплата за каждого дополнительного гостя, ₽
+  </label>
+
+  <input
+    type="number"
+    id="extra-guest-price"
+    class="price-input"
+    min="0"
+    placeholder="500"
+  >
 </section>
 
 <section class="admin-card">
