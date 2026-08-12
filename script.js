@@ -15,6 +15,8 @@ const extraGuestPrice =
 const checkin = document.getElementById("checkin");
 const checkout = document.getElementById("checkout");
 const guests = document.getElementById("guests");
+const guestExtraCharge =
+  document.getElementById("guest-extra-charge");
 const result = document.getElementById("booking-result");
 const bookButton = document.getElementById("book-button");
 
