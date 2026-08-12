@@ -1,4 +1,16 @@
-const pricePerNight = 3000;
+const defaultPricePerNight = 3000;
+
+const savedSettings =
+  JSON.parse(localStorage.getItem("rentalSettings")) || {};
+
+const pricePerNight =
+  Number(savedSettings.pricePerNight) || defaultPricePerNight;
+
+const includedGuests =
+  Number(savedSettings.includedGuests) || 1;
+
+const extraGuestPrice =
+  Number(savedSettings.extraGuestPrice) || 0;
 
 const checkin = document.getElementById("checkin");
 const checkout = document.getElementById("checkout");
