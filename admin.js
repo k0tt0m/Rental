@@ -8,6 +8,8 @@ const defaultSettings = {
 const titleInput = document.getElementById("apartment-title");
 const descriptionInput = document.getElementById("apartment-description");
 const priceInput = document.getElementById("price-per-night");
+const includedGuestsInput = document.getElementById("included-guests");
+const extraGuestPriceInput = document.getElementById("extra-guest-price");
 
 const photoInputs = [
   document.getElementById("photo-1"),
