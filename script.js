@@ -1,26 +1,68 @@
-const pricePerNight = 3000;
+[13.08.2026 0:00] Андрей Сабадаш: const pricePerNight = 3000;
 
 const checkin = document.getElementById("checkin");
 const checkout = document.getElementById("checkout");
+const guests = document.getElementById("guests");
 const result = document.getElementById("booking-result");
 const bookButton = document.getElementById("book-button");
 
-const today = new Date().toISOString().split("T")[0];
+if (!checkin  !checkout  !guests  !result  !bookButton) {
+  console.error("Не найдены элементы формы бронирования.");
+} else {
+  const today = new Date().toISOString().split("T")[0];
 
-checkin.min = today;
-checkout.min = today;
+  checkin.min = today;
+  checkout.min = today;
 
-checkin.addEventListener("change", () => {
-  checkout.min = checkin.value;
+  checkin.addEventListener("change", () => {
+    checkout.min = checkin.value;
 
-  if (checkout.value && checkout.value <= checkin.value) {
-    checkout.value = "";
-  }
+    if (checkout.value && checkout.value <= checkin.value) {
+      checkout.value = "";
+    }
 
-  calculatePrice();
-});
+    calculatePrice();
+  });
 
-checkout.addEventListener("change", calculatePrice);
+  checkout.addEventListener("change", calculatePrice);
+
+  bookButton.addEventListener("click", () => {
+    if (!checkin.value || !checkout.value) {
+      result.textContent =
+        "Пожалуйста, выберите даты заезда и выезда.";
+      return;
+    }
+
+    const start = new Date(checkin.value);
+    const end = new Date(checkout.value);
+
+    const difference = end - start;
+
+    const nights = Math.ceil(
+      difference / (1000 * 60 * 60 * 24)
+    );
+
+    if (nights <= 0) {
+      result.textContent =
+        "Дата выезда должна быть позже даты заезда.";
+      return;
+    }
+
+    const total = nights * pricePerNight;
+    const guestCount = guests.value;
+
+    result.textContent =
+      Количество ночей: ${nights}. Стоимость: ${formatPrice(total)} ₽;
+
+    openBookingModal(
+      checkin.value,
+      checkout.value,
+      nights,
+      total,
+      guestCount
+    );
+  });
+}
 
 function calculatePrice() {
   if (!checkin.value || !checkout.value) {
@@ -32,59 +74,29 @@ function calculatePrice() {
   const end = new Date(checkout.value);
 
   const difference = end - start;
+
   const nights = Math.ceil(
     difference / (1000 * 60 * 60 * 24)
   );
 
   if (nights <= 0) {
-    result.textContent = "Пожалуйста, выберите корректные даты.";
+    result.textContent =
+      "Пожалуйста, выберите корректные даты.";
     return;
   }
 
   const total = nights * pricePerNight;
 
-  // ИСПРАВЛЕНО: добавлена обратная кавычка ` в начале строки
   result.textContent =
-    `Количество ночей: ${nights}. Стоимость: ${formatPrice(total)} ₽`;
+    Количество ночей: ${nights}. Стоимость: ${formatPrice(total)} ₽;
 }
-
-bookButton.addEventListener("click", () => {
-  if (!checkin.value || !checkout.value) {
-    result.textContent =
-      "Пожалуйста, выберите даты заезда и выезда.";
-    return;
-  }
-
-  const start = new Date(checkin.value);
-  const end = new Date(checkout.value);
-
-  const difference = end - start;
-
-  const nights = Math.ceil(
-    difference / (1000 * 60 * 60 * 24)
-  );
-
-  if (nights <= 0) {
-    result.textContent =
-      "Дата выезда должна быть позже даты заезда.";
-    return;
-  }
-
-  const total = nights * pricePerNight;
-
-  openBookingModal(
-    checkin.value,
-    checkout.value,
-    nights,
-    total
-  );
-});
 
 function openBookingModal(
   checkinDate,
   checkoutDate,
   nights,
-  total
+  total,
+  guestCount
 ) {
   const modal = document.createElement("div");
 
@@ -114,6 +126,11 @@ function openBookingModal(
         </div>
 
         <div class="booking-row">
+          <span>Количество гостей</span>
+          <strong>${guestCount}</strong>
+        </div>
+
+        <div class="booking-row">
           <span>Количество ночей</span>
           <strong>${nights}</strong>
         </div>
@@ -128,7 +145,7 @@ function openBookingModal(
       <div class="modal-actions">
 
         <button class="btn btn-secondary cancel-button">
-          Изменить даты
+          Изменить данные
         </button>
 
         <button class="btn continue-button">
@@ -166,7 +183,7 @@ function openBookingModal(
       closeModal();
 
       alert(
-        "Следующим шагом добавим форму с номером телефона и подтверждением бронирования."
+[13.08.2026 0:00] Андрей Сабадаш: "Следующим шагом добавим форму с номером телефона и подтверждением бронирования."
       );
     });
 }
