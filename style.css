@@ -1,345 +1,186 @@
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
+const pricePerNight = 3000;
+
+const checkin = document.getElementById("checkin");
+const checkout = document.getElementById("checkout");
+const result = document.getElementById("booking-result");
+const bookButton = document.getElementById("book-button");
+
+const today = new Date().toISOString().split("T")[0];
+
+checkin.min = today;
+checkout.min = today;
+
+checkin.addEventListener("change", () => {
+checkout.min = checkin.value;
+
+if (checkout.value && checkout.value <= checkin.value) {
+checkout.value = "";
 }
 
-html {
-  scroll-behavior: smooth;
+calculatePrice();
+});
+
+checkout.addEventListener("change", calculatePrice);
+
+function calculatePrice() {
+if (!checkin.value || !checkout.value) {
+result.textContent = "";
+return;
 }
 
-body {
-  font-family: Arial, sans-serif;
-  background: #f5f6f8;
-  color: #222;
-  line-height: 1.6;
+const start = new Date(checkin.value);
+const end = new Date(checkout.value);
+
+const difference = end - start;
+const nights = Math.ceil(
+difference / (1000 * 60 * 60 * 24)
+);
+
+if (nights <= 0) {
+result.textContent = "Пожалуйста, выберите корректные даты.";
+return;
 }
 
-.container {
-  width: min(1100px, 92%);
-  margin: 0 auto;
+const total = nights * pricePerNight;
+
+// ИСПРАВЛЕНО: добавлена обратная кавычка в начале строки   result.textContent =    Количество ночей: ${nights}. Стоимость: ${formatPrice(total)} ₽`;
 }
 
-/* Главный экран */
-
-.hero {
-  min-height: 520px;
-  display: flex;
-  align-items: center;
-  text-align: center;
-  color: white;
-  background:
-    linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
-    url("https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=1800&q=80")
-    center / cover;
+bookButton.addEventListener("click", () => {
+if (!checkin.value || !checkout.value) {
+result.textContent =
+"Пожалуйста, выберите даты заезда и выезда.";
+return;
 }
 
-.hero .container {
-  padding: 60px 0;
+const start = new Date(checkin.value);
+const end = new Date(checkout.value);
+
+const difference = end - start;
+
+const nights = Math.ceil(
+difference / (1000 * 60 * 60 * 24)
+);
+
+if (nights <= 0) {
+result.textContent =
+"Дата выезда должна быть позже даты заезда.";
+return;
 }
 
-.location {
-  font-size: 18px;
-  margin-bottom: 20px;
+const total = nights * pricePerNight;
+
+openBookingModal(
+checkin.value,
+checkout.value,
+nights,
+total
+);
+});
+
+function openBookingModal(
+checkinDate,
+checkoutDate,
+nights,
+total
+) {
+const modal = document.createElement("div");
+
+modal.className = "modal active";
+
+modal.innerHTML = `
+<div class="modal-content">
+
+codeblock
+  <button class="modal-close" aria-label="Закрыть">
+    ×
+  </button>
+
+  <h2 class="modal-title">
+    Бронирование квартиры
+  </h2>
+
+  <div class="booking-info">
+
+    <div class="booking-row">
+      <span>Заезд</span>
+      <strong>${formatDate(checkinDate)}</strong>
+    </div>
+
+    <div class="booking-row">
+      <span>Выезд</span>
+      <strong>${formatDate(checkoutDate)}</strong>
+    </div>
+
+    <div class="booking-row">
+      <span>Количество ночей</span>
+      <strong>${nights}</strong>
+    </div>
+
+    <div class="booking-row booking-total">
+      <span>Итого</span>
+      <strong>${formatPrice(total)} ₽</strong>
+    </div>
+
+  </div>
+
+  <div class="modal-actions">
+
+    <button class="btn btn-secondary cancel-button">
+      Изменить даты
+    </button>
+
+    <button class="btn continue-button">
+      Перейти к бронированию
+    </button>
+
+  </div>
+
+</div>
+`;
+
+document.body.appendChild(modal);
+
+const closeModal = () => {
+modal.remove();
+};
+
+modal
+.querySelector(".modal-close")
+.addEventListener("click", closeModal);
+
+modal
+.querySelector(".cancel-button")
+.addEventListener("click", closeModal);
+
+modal.addEventListener("click", (event) => {
+if (event.target === modal) {
+closeModal();
+}
+});
+
+modal
+.querySelector(".continue-button")
+.addEventListener("click", () => {
+closeModal();
+
+codeblock
+  alert(
+    "Следующим шагом добавим форму с номером телефона и подтверждением бронирования."
+  );
+});
 }
 
-h1 {
-  font-size: clamp(36px, 6vw, 64px);
-  line-height: 1.1;
-  margin-bottom: 20px;
+function formatDate(dateString) {
+const date = new Date(dateString);
+
+return date.toLocaleDateString("ru-RU", {
+day: "2-digit",
+month: "2-digit",
+year: "numeric"
+});
 }
 
-.subtitle {
-  font-size: 22px;
-  margin-bottom: 35px;
-}
-
-/* Кнопки */
-
-.btn {
-  display: inline-block;
-  border: none;
-  border-radius: 12px;
-  padding: 15px 30px;
-  background: #111;
-  color: white;
-  font-size: 17px;
-  font-weight: bold;
-  text-decoration: none;
-  cursor: pointer;
-  transition: 0.2s;
-}
-
-.btn:hover {
-  transform: translateY(-2px);
-  opacity: 0.9;
-}
-
-/* Галерея */
-
-.gallery {
-  display: grid;
-  grid-template-columns: 2fr 1fr;
-  gap: 15px;
-  padding-top: 50px;
-}
-
-.gallery img {
-  width: 100%;
-  height: 280px;
-  object-fit: cover;
-  border-radius: 18px;
-}
-
-.gallery img:first-child {
-  grid-row: span 2;
-  height: 575px;
-}
-
-/* Общие секции */
-
-.about,
-.price,
-.booking {
-  background: white;
-  border-radius: 20px;
-  padding: 40px;
-  margin-top: 30px;
-}
-
-h2 {
-  font-size: 32px;
-  margin-bottom: 18px;
-}
-
-.about p {
-  font-size: 18px;
-  color: #555;
-}
-
-/* Удобства */
-
-.features {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 15px;
-  margin-top: 30px;
-}
-
-.features div {
-  padding: 18px;
-  background: #f5f6f8;
-  border-radius: 12px;
-  font-size: 17px;
-}
-
-/* Цена */
-
-.price {
-  text-align: center;
-}
-
-.price-value {
-  font-size: 42px;
-  font-weight: bold;
-}
-
-.price-value span {
-  font-size: 18px;
-  font-weight: normal;
-  color: #666;
-}
-
-/* Бронирование */
-
-.booking {
-  text-align: center;
-  margin-bottom: 50px;
-}
-
-.booking > p {
-  color: #666;
-  margin-bottom: 25px;
-}
-
-.date-fields {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 20px;
-  max-width: 600px;
-  margin: 0 auto 25px;
-  text-align: left;
-}
-
-.date-fields label {
-  font-weight: bold;
-}
-
-.date-fields input {
-  display: block;
-  width: 100%;
-  margin-top: 7px;
-  padding: 13px;
-  border: 1px solid #ccc;
-  border-radius: 10px;
-  font-size: 16px;
-}
-
-.booking-result {
-  min-height: 25px;
-  margin-bottom: 20px;
-  font-weight: bold;
-}
-
-/* Подвал */
-
-footer {
-  padding: 35px 0;
-  text-align: center;
-  background: #111;
-  color: white;
-}
-
-footer p + p {
-  color: #aaa;
-  margin-top: 5px;
-}
-
-/* Телефон */
-
-@media (max-width: 700px) {
-  .hero {
-    min-height: 500px;
-  }
-
-  .subtitle {
-    font-size: 18px;
-  }
-
-  .gallery {
-    grid-template-columns: 1fr;
-  }
-
-  .gallery img,
-  .gallery img:first-child {
-    height: 250px;
-    grid-row: auto;
-  }
-
-  .about,
-  .price,
-  .booking {
-    padding: 25px;
-  }
-
-  .features {
-    grid-template-columns: 1fr;
-  }
-
-  .date-fields {
-    grid-template-columns: 1fr;
-  }
-
-  .price-value {
-    font-size: 34px;
-  }
-/* Модальное окно бронирования */
-
-.modal {
-  position: fixed;
-  inset: 0;
-  display: none;
-  align-items: center;
-  justify-content: center;
-  padding: 20px;
-  background: rgba(0, 0, 0, 0.6);
-  z-index: 1000;
-}
-
-.modal.active {
-  display: flex;
-}
-
-.modal-content {
-  width: min(500px, 100%);
-  background: white;
-  border-radius: 24px;
-  padding: 35px;
-  position: relative;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
-  animation: modalOpen 0.2s ease-out;
-}
-
-@keyframes modalOpen {
-  from {
-    opacity: 0;
-    transform: translateY(20px) scale(0.97);
-  }
-
-  to {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
-}
-
-.modal-close {
-  position: absolute;
-  top: 15px;
-  right: 18px;
-  border: none;
-  background: none;
-  font-size: 30px;
-  cursor: pointer;
-  color: #777;
-}
-
-.modal-title {
-  font-size: 28px;
-  margin-bottom: 25px;
-}
-
-.booking-info {
-  background: #f5f6f8;
-  border-radius: 15px;
-  padding: 20px;
-  margin-bottom: 25px;
-}
-
-.booking-row {
-  display: flex;
-  justify-content: space-between;
-  gap: 20px;
-  padding: 8px 0;
-}
-
-.booking-total {
-  border-top: 1px solid #ddd;
-  margin-top: 10px;
-  padding-top: 15px;
-  font-size: 21px;
-  font-weight: bold;
-}
-
-.modal-actions {
-  display: flex;
-  gap: 12px;
-}
-
-.modal-actions button {
-  flex: 1;
-}
-
-.btn-secondary {
-  background: #eee;
-  color: #222;
-}
-
-@media (max-width: 600px) {
-  .modal-content {
-    padding: 25px 20px;
-  }
-
-  .modal-actions {
-    flex-direction: column;
-  }
+function formatPrice(price) {
+return price.toLocaleString("ru-RU");
 }
