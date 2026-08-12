@@ -50,7 +50,18 @@ if (!checkin || !checkout || !guests || !result || !bookButton) {
       return;
     }
 
-    const total = nights * pricePerNight;
+    onst guestCount = Number(guests.value) || 1;
+
+const extraGuests = Math.max(
+  0,
+  guestCount - includedGuests
+);
+
+const extraCharge =
+  extraGuests * extraGuestPrice;
+
+const total =
+  nights * pricePerNight + extraCharge;
 
     result.textContent =
       `Количество ночей: ${nights}. Стоимость: ${formatPrice(total)} ₽`;
