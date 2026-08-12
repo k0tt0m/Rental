@@ -1,16 +1,16 @@
 const defaultPricePerNight = 3000;
 
 const savedSettings =
-  JSON.parse(localStorage.getItem("rentalSettings"))  {};
+  JSON.parse(localStorage.getItem("rentalSettings")) || {};
 
 const pricePerNight =
-  Number(savedSettings.pricePerNight)  defaultPricePerNight;
+  Number(savedSettings.pricePerNight) || defaultPricePerNight;
 
 const includedGuests =
-  Number(savedSettings.includedGuests)  1;
+  Number(savedSettings.includedGuests) || 1;
 
 const extraGuestPrice =
-  Number(savedSettings.extraGuestPrice)  0;
+  Number(savedSettings.extraGuestPrice) || 0;
 
 const checkin = document.getElementById("checkin");
 const checkout = document.getElementById("checkout");
@@ -21,7 +21,7 @@ const result = document.getElementById("booking-result");
 const bookButton = document.getElementById("book-button");
 
 // Проверка наличия элементов
-if (!checkin  !checkout  !guests  !result  !bookButton) {
+if (!checkin || !checkout || !guests || !result || !bookButton) {
   console.error("Не найдены элементы формы бронирования.");
 } else {
   const today = new Date().toISOString().split("T")[0];
@@ -34,23 +34,24 @@ if (!checkin  !checkout  !guests  !result  !bookButton) {
   checkout.addEventListener("change", updateBookingInfo);
 
   function updateBookingInfo() {
-    const guestCount = Number(guests.value)  1;
+    const guestCount = Number(guests.value) || 1;
 
-const extraGuests = Math.max(
-  0,
-  guestCount - includedGuests
-);
+    const extraGuests = Math.max(
+      0,
+      guestCount - includedGuests
+    );
 
-const extraCharge =
-  extraGuests * extraGuestPrice;
+    const extraCharge =
+      extraGuests * extraGuestPrice;
 
-if (guestExtraCharge) {
-  guestExtraCharge.textContent =
-    extraCharge > 0
-      ? Доплата за гостей: +${formatPrice(extraCharge)} ₽
-      : "";
-}
-    if (!checkin.value  !checkout.value) {
+    if (guestExtraCharge) {
+      guestExtraCharge.textContent =
+        extraCharge > 0
+          ? `Доплата за гостей: ${formatPrice(extraCharge)} ₽`
+          : "";
+    }
+
+    if (!checkin.value || !checkout.value) {
       result.textContent = "";
       return;
     }
@@ -68,18 +69,8 @@ if (guestExtraCharge) {
       return;
     }
 
-    onst guestCount = Number(guests.value)  1;
-
-const extraGuests = Math.max(
-  0,
-  guestCount - includedGuests
-);
-
-const extraCharge =
-  extraGuests * extraGuestPrice;
-
-const total =
-  nights * pricePerNight + extraCharge;
+    const total =
+      nights * pricePerNight + extraCharge;
 
     result.textContent =
       `Количество ночей: ${nights}. Стоимость: ${formatPrice(total)} ₽`;
@@ -87,7 +78,7 @@ const total =
 
   // Обработка кнопки бронирования
   bookButton.addEventListener("click", function () {
-    if (!checkin.value  !checkout.value) {
+    if (!checkin.value || !checkout.value) {
       result.textContent =
         "Пожалуйста, выберите даты заезда и выезда.";
       return;
@@ -171,7 +162,7 @@ function openBookingModal(
       </div>
 
       <div class="modal-actions">
-      <button class="btn btn-secondary cancel-button">
+        <button class="btn btn-secondary cancel-button">
           Изменить данные
         </button>
 
