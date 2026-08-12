@@ -1,4 +1,4 @@
-[13.08.2026 0:00] Андрей Сабадаш: const pricePerNight = 3000;
+const pricePerNight = 3000;
 
 const checkin = document.getElementById("checkin");
 const checkout = document.getElementById("checkout");
