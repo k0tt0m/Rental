@@ -34,6 +34,22 @@ if (!checkin || !checkout || !guests || !result || !bookButton) {
   checkout.addEventListener("change", updateBookingInfo);
 
   function updateBookingInfo() {
+    const guestCount = Number(guests.value) || 1;
+
+const extraGuests = Math.max(
+  0,
+  guestCount - includedGuests
+);
+
+const extraCharge =
+  extraGuests * extraGuestPrice;
+
+if (guestExtraCharge) {
+  guestExtraCharge.textContent =
+    extraCharge > 0
+      ? Доплата за гостей: +${formatPrice(extraCharge)} ₽
+      : "";
+}
     if (!checkin.value || !checkout.value) {
       result.textContent = "";
       return;
