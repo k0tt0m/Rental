@@ -1,4 +1,4 @@
-[13.08.2026 3:08] Андрей Сабадаш: const defaultPricePerNight = 3000;
+const defaultPricePerNight = 3000;
 
 const savedSettings =
   JSON.parse(localStorage.getItem("rentalSettings")) || {};
@@ -207,7 +207,7 @@ function openBookingModal(
         <div class="booking-row">
           <span>Количество гостей</span>
           <strong>
-[13.08.2026 3:08] Андрей Сабадаш: ${guestCount}
+            ${guestCount}
           </strong>
         </div>
 
@@ -217,7 +217,8 @@ function openBookingModal(
             ${nights}
           </strong>
         </div>
-[13.08.2026 3:08] Андрей Сабадаш: ${
+
+        ${
           extraCharge > 0
             ? `
               <div class="booking-row">
